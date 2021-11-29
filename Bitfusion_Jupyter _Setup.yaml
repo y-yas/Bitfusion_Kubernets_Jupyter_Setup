@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupyter-service-np
+spec:
+  selector:
+    app: bf-jupyter
+  ports:
+  - protocol: TCP
+    port: 8888
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bf-jupyter
+  template:
+    metadata:
+      labels:
+        app: bf-jupyter
+    spec:
+      hostNetwork: true
+      containers:
+      - name: bf-jupyter
+        image: ubuntu
+        command: ["/bin/sh", "-c", "while : ;do curl http://localhost:80/; sleep 3; done"]
+        volumeMounts:
+        - name: config-files
+          mountPath: /etc/bitfusion
+        - name: certificate
+          mountPath: /etc/bitfusion/tls
+      volumes:
+      - name: config-files
+        projected:
+          defaultMode: 0640
+          sources:
+          - secret:
+              name: bitfusion-client-secret-client.yml
+          - secret:
+              name: bitfusion-client-secret-servers.conf
+      - name: certificate
+        secret:
+          secretName: bitfusion-client-secret-ca.crt
+          defaultMode: 0640
