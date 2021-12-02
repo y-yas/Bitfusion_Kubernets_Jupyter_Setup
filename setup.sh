@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd
 apt update -y\
 && apt install -y python3-pip python3-pandas python3-sklearn wget;
 
@@ -12,4 +11,10 @@ cd \
 
 jupyter notebook --generate-config\
 && echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py;
+
+cd ~/tmp/share/jupyter/kernels/
+mv python3/ bitfusion-basic
+cat ~/Bitfusion_JupyterLab/kernel.json > ./bitfusion-basic/kernel.json
+jupyter kernelspec install --user ~/tmp/share/jupyter/kernels/bitfusion-basic/
+
 jupyter-lab --allow-root
