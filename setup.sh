@@ -12,9 +12,9 @@ cd \
 jupyter notebook --generate-config\
 && echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py;
 
-cd ~/tmp/share/jupyter/kernels/
+cd /usr/local/share/jupyter/kernels
 mv python3/ bitfusion-basic
-cat ~/Bitfusion_JupyterLab/kernel.json > ./bitfusion-basic/kernel.json
-jupyter kernelspec install --user ~/tmp/share/jupyter/kernels/bitfusion-basic/
+cat ~/kernel.json > ./bitfusion-basic/kernel.json
+jupyter kernelspec install --user /usr/local/share/jupyter/kernels/bitfusion-basic/
 
 jupyter-lab --allow-root
